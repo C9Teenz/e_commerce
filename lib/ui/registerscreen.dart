@@ -4,35 +4,40 @@ import 'package:e_commerce_comic/ui/widgets/textformpassword.dart';
 import 'package:e_commerce_comic/utils/themes.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:go_router/go_router.dart';
 
 import '../routers/app_pages.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController? identity;
+class _RegisterScreenState extends State<RegisterScreen> {
+  TextEditingController? email;
   TextEditingController? password;
+  TextEditingController? name;
+  TextEditingController? username;
   final _formKey = GlobalKey<FormState>();
   bool obscureT = true;
 
   @override
   void initState() {
-    identity = TextEditingController();
+    email = TextEditingController();
     password = TextEditingController();
+    username = TextEditingController();
+    name = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    identity?.dispose();
+    email?.dispose();
     password?.dispose();
+    username?.dispose();
+    name?.dispose();
     super.dispose();
   }
 
@@ -48,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "Login Account",
+                  "Register Account",
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w500,
@@ -68,16 +73,44 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextFormGlobal(
-                        control: identity!,
+                        control: email!,
+                        validator: (value) {
+                          if (value!.isEmpty || !value.contains("@")) {
+                            return "Please make sure use correct format";
+                          }
+                          return null;
+                        },
+                        inputType: TextInputType.text,
+                        icon: Icons.email,
+                        label: "Enter Your Email"),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    TextFormGlobal(
+                        control: name!,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Please enter your Email";
+                            return "Name is Empty";
                           }
                           return null;
                         },
                         inputType: TextInputType.text,
                         icon: Icons.person,
-                        label: "Enter Your Email"),
+                        label: "Enter Your Name"),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    TextFormGlobal(
+                        control: username!,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "UserName is Empty";
+                          }
+                          return null;
+                        },
+                        inputType: TextInputType.text,
+                        icon: Icons.attach_file_sharp,
+                        label: "Enter Your username"),
                     const SizedBox(
                       height: 16,
                     ),
@@ -95,9 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             obscureT = !obscureT;
                           });
                         }),
-                    const SizedBox(
-                      height: 16,
-                    ),
                   ],
                 ),
               ),
@@ -108,27 +138,29 @@ class _LoginScreenState extends State<LoginScreen> {
             RichText(
                 text: TextSpan(text: "Haven't an account? ", children: [
               TextSpan(
-                  text: "Register",
+                  text: "Login",
                   style: const TextStyle(color: Colors.blue),
                   recognizer: TapGestureRecognizer()
-                    ..onTap = () => context.go(Routes.register))
+                    ..onTap = () => context.go(Routes.login))
             ])),
             Expanded(
                 child: Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: CustomButton(
-                      title: "Login",
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          context.go(Routes.home);
-                        }
-                      },
-                      color: kPrimaryColor,
-                      textStyle: titleTextStyle.copyWith(color: Colors.white))),
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                margin: const EdgeInsets.only(bottom: 16),
+                child: CustomButton(
+                  title: "Register",
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      context.go(Routes.login);
+                    }
+                  },
+                  color: kPrimaryColor,
+                  textStyle: titleTextStyle.copyWith(color: Colors.white),
+                ),
+              ),
             ))
           ],
         ),

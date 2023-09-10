@@ -1,17 +1,15 @@
 // ignore_for_file: camel_case_types, prefer_typing_uninitialized_variables
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:e_commerce_comic/cubit/detail/detail_cubit.dart';
+import 'package:e_commerce_comic/cubit/detailcarosel/detail_cubit.dart';
 import 'package:e_commerce_comic/models/comic_model.dart';
 import 'package:e_commerce_comic/utils/constants.dart';
 import 'package:e_commerce_comic/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
-
 class CaroselDetail extends StatelessWidget {
-  const CaroselDetail({Key? key,required this.images}) : super(key: key);
+  const CaroselDetail({Key? key, required this.images}) : super(key: key);
 
   final List<ImagesDatum> images;
 
@@ -27,13 +25,13 @@ class CaroselDetail extends StatelessWidget {
               options: CarouselOptions(
                 autoPlayCurve: Curves.linear,
                 animateToClosest: false,
-                height: 160.0,
+                height: MediaQuery.of(context).size.height * 0.3,
                 autoPlay: false,
                 onPageChanged: (index, reason) {
                   context.read<DetailCubit>().changeIndex(index);
                 },
               ),
-              items:images.map((image) {
+              items: images.map((image) {
                 return Builder(
                   builder: (BuildContext context) {
                     return Container(
@@ -47,7 +45,7 @@ class CaroselDetail extends StatelessWidget {
                           image: NetworkImage(
                             "${Constant.baseUrl}${image.attributes.url}",
                           ),
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     );

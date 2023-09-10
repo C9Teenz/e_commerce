@@ -1,3 +1,5 @@
+import 'package:e_commerce_comic/cubit/counter/counter_cubit.dart';
+import 'package:e_commerce_comic/cubit/detailcarosel/detail_cubit.dart';
 import 'package:e_commerce_comic/cubit/filtergenre/filtergenre_cubit.dart';
 import 'package:e_commerce_comic/cubit/getcomic/getcomic_cubit.dart';
 import 'package:e_commerce_comic/cubit/home/home_cubit.dart';
@@ -37,6 +39,12 @@ class MainApp extends StatelessWidget {
         BlocProvider<GetcomicCubit>(
           create: (context) => GetcomicCubit(RemoteData())..get(),
         ),
+        BlocProvider<DetailCubit>(
+          create: (context) => DetailCubit(),
+        ),
+        BlocProvider<CounterCubit>(
+          create: (context) => CounterCubit(),
+        ),
       ],
       child: MaterialApp.router(
         theme: ThemeData().copyWith(
@@ -46,7 +54,7 @@ class MainApp extends StatelessWidget {
         title: Constant.titleApp,
         debugShowCheckedModeBanner: false,
         routerConfig:
-            GoRouter(routes: AppPages.routes, initialLocation: Routes.main),
+            GoRouter(routes: AppPages.routes, initialLocation: Routes.login),
       ),
     );
   }

@@ -3,11 +3,13 @@
 import 'package:e_commerce_comic/cubit/filtergenre/filtergenre_cubit.dart';
 import 'package:e_commerce_comic/cubit/getcomic/getcomic_cubit.dart';
 import 'package:e_commerce_comic/models/genre_category_model.dart';
+import 'package:e_commerce_comic/routers/app_pages.dart';
 import 'package:e_commerce_comic/ui/widgets/cardItem.dart';
 import 'package:e_commerce_comic/ui/widgets/caroselslider.dart';
 import 'package:e_commerce_comic/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../utils/constants.dart';
 
@@ -127,6 +129,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: CircularProgressIndicator(),
                               ),
                               loaded: (model, page, isNext) {
+                                if (model.isEmpty) {
+                                  return const Center(
+                                    child: Text("No Comics"),
+                                  );
+                                }
                                 return GridView.builder(
                                   padding: EdgeInsets.zero,
                                   gridDelegate:
@@ -142,7 +149,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     final item = model[index];
-                                    return CardItem(data: item);
+                                    return GestureDetector(onTap: (){
+                                      context.push(Routes.detail,extra: item);
+                                    },child: CardItem(data: item));
                                   },
                                 );
                               },
