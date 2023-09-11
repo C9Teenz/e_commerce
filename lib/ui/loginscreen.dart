@@ -1,5 +1,6 @@
 import 'package:e_commerce_comic/cubit/login/login_cubit.dart';
 import 'package:e_commerce_comic/cubit/navbarbutton/navbarbutton_cubit.dart';
+import 'package:e_commerce_comic/cubit/profile/profile_cubit.dart';
 import 'package:e_commerce_comic/ui/widgets/custombutton.dart';
 import 'package:e_commerce_comic/ui/widgets/textformglobal.dart';
 import 'package:e_commerce_comic/ui/widgets/textformpassword.dart';
@@ -73,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFormGlobal(
                         control: identity!,
                         validator: (value) {
-                          if (!value!.contains("@")) {
+                          if (value!.isEmpty || !value.contains("@")) {
                             return "Please enter your Email correctly";
                           }
                           return null;
@@ -88,8 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         control: password!,
                         obscure: obscureT,
                         validator: (value) {
-                          if (value!.isEmpty || value.length < 5) {
-                            return "Please enter your password";
+                          if (value!.isEmpty || value.length < 6) {
+                            return "Please enter your passwordc correctly";
                           }
                           return null;
                         },
@@ -122,6 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   orElse: () {},
                   loaded: (data) {
                     context.read<NavbarbuttonCubit>().changeIndex(0);
+                    context.read<ProfileCubit>().get();
                     context.go(Routes.main);
                   },
                   error: (error) {

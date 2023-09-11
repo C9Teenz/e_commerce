@@ -23,6 +23,7 @@ class LocalData {
 
   static Future<String> getToken() {
     return SharedPreferences.getInstance().then((pref) {
+      print(pref.getString('token'));
       return pref.getString('token') ?? '';
     });
   }

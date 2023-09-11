@@ -1,11 +1,14 @@
+import 'package:e_commerce_comic/cubit/register/register_cubit.dart';
 import 'package:e_commerce_comic/ui/widgets/custombutton.dart';
 import 'package:e_commerce_comic/ui/widgets/textformglobal.dart';
 import 'package:e_commerce_comic/ui/widgets/textformpassword.dart';
 import 'package:e_commerce_comic/utils/themes.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../cubit/navbarbutton/navbarbutton_cubit.dart';
 import '../routers/app_pages.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -18,7 +21,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController? email;
   TextEditingController? password;
-  TextEditingController? name;
+
   TextEditingController? username;
   final _formKey = GlobalKey<FormState>();
   bool obscureT = true;
@@ -28,7 +31,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     email = TextEditingController();
     password = TextEditingController();
     username = TextEditingController();
-    name = TextEditingController();
     super.initState();
   }
 
@@ -37,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     email?.dispose();
     password?.dispose();
     username?.dispose();
-    name?.dispose();
+
     super.dispose();
   }
 
@@ -129,25 +131,55 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => context.go(Routes.login))
             ])),
-            Expanded(
-                child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                margin: const EdgeInsets.only(bottom: 16),
-                child: CustomButton(
-                  title: "Register",
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      context.go(Routes.login);
-                    }
+            BlocListener<RegisterCubit, RegisterState>(
+              listener: (context, state) {
+                state.maybeWhen(
+                  orElse: () {},
+                  loaded: (data) {
+                    context.read<NavbarbuttonCubit>().changeIndex(0);
+                    context.go(Routes.main);
                   },
-                  color: kPrimaryColor,
-                  textStyle: titleTextStyle.copyWith(color: Colors.white),
+                  error: (error) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(error),
+                          content: Text(error),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text("OK"),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+              child: Expanded(
+                  child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: CustomButton(
+                    title: "Register",
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.go(Routes.login);
+                      }
+                    },
+                    color: kPrimaryColor,
+                    textStyle: titleTextStyle.copyWith(color: Colors.white),
+                  ),
                 ),
-              ),
-            ))
+              )),
+            )
           ],
         ),
       ),

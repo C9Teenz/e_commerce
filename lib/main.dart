@@ -4,6 +4,7 @@ import 'package:e_commerce_comic/cubit/filtergenre/filtergenre_cubit.dart';
 import 'package:e_commerce_comic/cubit/getcomic/getcomic_cubit.dart';
 import 'package:e_commerce_comic/cubit/home/home_cubit.dart';
 import 'package:e_commerce_comic/cubit/navbarbutton/navbarbutton_cubit.dart';
+import 'package:e_commerce_comic/cubit/profile/profile_cubit.dart';
 import 'package:e_commerce_comic/data/authdata.dart';
 import 'package:e_commerce_comic/data/remotedatacomic.dart';
 import 'package:e_commerce_comic/routers/app_pages.dart';
@@ -49,6 +50,9 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider<LoginCubit>(
           create: (context) => LoginCubit(AuthData()),
+        ),
+        BlocProvider<ProfileCubit>(
+          create: (context) => ProfileCubit(AuthData())..get(),
         ),
       ],
       child: MaterialApp.router(
