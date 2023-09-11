@@ -28,48 +28,48 @@ class MainScreen extends StatelessWidget {
     }
 
     Widget customButtonNav() {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          width: double.infinity,
-          height: 60,
-          margin: const EdgeInsets.only(left: 24, right: 24, bottom: 30),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              NavButtonItem(
-                icon: Icons.house,
-                index: 0,
-                label: "Home",
-              ),
-              NavButtonItem(
-                icon: Icons.shopping_basket,
-                index: 1,
-                label: "Cart",
-              ),
-              NavButtonItem(
-                icon: Icons.person,
-                index: 2,
-                label: "Profile",
-              ),
-            ],
-          ),
+      return Container(
+        width: double.infinity,
+        height: 60,
+        margin: const EdgeInsets.only(left: 24, right: 24, bottom: 30),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            NavButtonItem(
+              icon: Icons.house,
+              index: 0,
+              label: "Home",
+            ),
+            NavButtonItem(
+              icon: Icons.shopping_basket,
+              index: 1,
+              label: "Cart",
+            ),
+            NavButtonItem(
+              icon: Icons.person,
+              index: 2,
+              label: "Profile",
+            ),
+          ],
         ),
       );
     }
 
-    return BlocBuilder<NavbarbuttonCubit, int>(
-      builder: (context, state) {
-        return Scaffold(
-          body: Stack(
-            children: [buildContent(state), customButtonNav()],
-          ),
-        );
-      },
+    return Scaffold(
+      body: BlocBuilder<NavbarbuttonCubit, int>(
+        builder: (context, state) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.9,
+            width: double.infinity,
+            child: buildContent(state),
+          );
+        },
+      ),
+      bottomNavigationBar: customButtonNav(),
     );
   }
 }

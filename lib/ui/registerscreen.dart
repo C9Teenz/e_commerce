@@ -87,20 +87,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 16,
                     ),
                     TextFormGlobal(
-                        control: name!,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Name is Empty";
-                          }
-                          return null;
-                        },
-                        inputType: TextInputType.text,
-                        icon: Icons.person,
-                        label: "Enter Your Name"),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    TextFormGlobal(
                         control: username!,
                         validator: (value) {
                           if (value!.isEmpty) {

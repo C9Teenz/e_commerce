@@ -1,9 +1,12 @@
+import 'package:e_commerce_comic/cubit/login/login_cubit.dart';
+import 'package:e_commerce_comic/cubit/navbarbutton/navbarbutton_cubit.dart';
 import 'package:e_commerce_comic/ui/widgets/custombutton.dart';
 import 'package:e_commerce_comic/ui/widgets/textformglobal.dart';
 import 'package:e_commerce_comic/ui/widgets/textformpassword.dart';
 import 'package:e_commerce_comic/utils/themes.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:go_router/go_router.dart';
 
@@ -70,8 +73,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFormGlobal(
                         control: identity!,
                         validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Please enter your Email";
+                          if (!value!.contains("@")) {
+                            return "Please enter your Email correctly";
                           }
                           return null;
                         },
@@ -113,23 +116,55 @@ class _LoginScreenState extends State<LoginScreen> {
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => context.go(Routes.register))
             ])),
-            Expanded(
-                child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: CustomButton(
-                      title: "Login",
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          context.go(Routes.home);
-                        }
+            BlocListener<LoginCubit, LoginState>(
+              listener: (context, state) {
+                state.maybeWhen(
+                  orElse: () {},
+                  loaded: (data) {
+                    context.read<NavbarbuttonCubit>().changeIndex(0);
+                    context.go(Routes.main);
+                  },
+                  error: (error) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(error),
+                          content: Text(error),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text("OK"),
+                            )
+                          ],
+                        );
                       },
-                      color: kPrimaryColor,
-                      textStyle: titleTextStyle.copyWith(color: Colors.white))),
-            ))
+                    );
+                  },
+                );
+              },
+              child: Expanded(
+                  child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: CustomButton(
+                        title: "Login",
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<LoginCubit>().login(
+                                email: identity!.text, pass: password!.text);
+                          }
+                        },
+                        color: kPrimaryColor,
+                        textStyle:
+                            titleTextStyle.copyWith(color: Colors.white))),
+              )),
+            )
           ],
         ),
       ),

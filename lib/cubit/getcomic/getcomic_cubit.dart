@@ -2,7 +2,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:e_commerce_comic/data/remotedata.dart';
+import 'package:e_commerce_comic/data/remotedatacomic.dart';
 import 'package:e_commerce_comic/models/comic_model.dart';
 
 part 'getcomic_cubit.freezed.dart';
