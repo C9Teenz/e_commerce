@@ -1,3 +1,4 @@
+import 'package:e_commerce_comic/cubit/cart/cart_cubit.dart';
 import 'package:e_commerce_comic/cubit/counter/counter_cubit.dart';
 import 'package:e_commerce_comic/cubit/detailcarosel/detail_cubit.dart';
 import 'package:e_commerce_comic/cubit/filtergenre/filtergenre_cubit.dart';
@@ -47,6 +48,9 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider<CounterCubit>(
           create: (context) => CounterCubit(),
+        ),
+        BlocProvider<CartCubit>(
+          create: (context) => CartCubit(),
         ),
         BlocProvider<LoginCubit>(
           create: (context) => LoginCubit(AuthData()),

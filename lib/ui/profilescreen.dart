@@ -143,7 +143,9 @@ class ProfileScreen extends StatelessWidget {
                                           ),
                                           onPressed: () {
                                             confirm = true;
-                                            context.go(Routes.login);
+                                            LocalData.deleteToken().then(
+                                                (value) =>
+                                                    context.go(Routes.login));
                                           },
                                           child: const Text("Yes"),
                                         ),

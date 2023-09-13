@@ -1,14 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: camel_case_types, prefer_typing_uninitialized_variables
 
-import 'package:e_commerce_comic/cubit/counter/counter_cubit.dart';
-import 'package:e_commerce_comic/ui/widgets/carosel_detail.dart';
-import 'package:e_commerce_comic/ui/widgets/custombutton.dart';
 import 'package:flutter/material.dart';
-
-import 'package:e_commerce_comic/models/comic_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+
+import 'package:e_commerce_comic/cubit/cart/cart_cubit.dart';
+import 'package:e_commerce_comic/cubit/counter/counter_cubit.dart';
+import 'package:e_commerce_comic/data/localdata.dart';
+import 'package:e_commerce_comic/models/cartmodel.dart';
+import 'package:e_commerce_comic/models/comic_model.dart';
+import 'package:e_commerce_comic/ui/widgets/carosel_detail.dart';
+import 'package:e_commerce_comic/ui/widgets/custombutton.dart';
+import 'package:e_commerce_comic/utils/constants.dart';
 
 import '../utils/themes.dart';
 
@@ -16,11 +20,14 @@ class DetailScreen extends StatelessWidget {
   const DetailScreen({
     Key? key,
     required this.data,
+
   }) : super(key: key);
   final ComicModelDatum data;
 
+
   @override
   Widget build(BuildContext context) {
+    int qty = 0;
     return Scaffold(
       backgroundColor: kContainerColor,
       body: SafeArea(
@@ -57,7 +64,64 @@ class DetailScreen extends StatelessWidget {
                                 shape: BoxShape.circle,
                               ),
                               child: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Map<String, dynamic> file = {
+                                    "id": data.id,
+                                    "comic_name": data.attributes.comicName,
+                                    "image":
+                                        "${Constant.baseUrl}${data.attributes.images.data[0].attributes.url}",
+                                    "price": int.parse(data.attributes.price),
+                                    "qty": qty
+                                  };
+                                  LocalData.isLogin().then((value) => {
+                                        if (value)
+                                          {
+                                            if (qty == 0)
+                                              {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                  content: Text(
+                                                      "Please add quantity"),
+                                                ))
+                                              }
+                                            else
+                                              {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                  content: Text(
+                                                      "Success add to cart"),
+                                                )),
+                                                context
+                                                    .read<CartCubit>()
+                                                    .addData(CartModel.fromJson(
+                                                        file))
+                                              }
+                                          }
+                                        else
+                                          {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: const Text("Warning"),
+                                                  content: const Text(
+                                                      "Please login first"),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: const Text("Ok"))
+                                                  ],
+                                                );
+                                              },
+                                            )
+                                          }
+                                      });
+                                },
                                 icon: const Icon(
                                     Icons.add_shopping_cart_outlined),
                               ),
@@ -217,6 +281,7 @@ class DetailScreen extends StatelessWidget {
                   ),
                   BlocBuilder<CounterCubit, int>(
                     builder: (context, state) {
+                      qty = state;
                       return Container(
                         width: 150,
                         decoration: BoxDecoration(
@@ -250,14 +315,18 @@ class DetailScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-                child: Container(
-              margin: const EdgeInsets.only(top: 8),
-              width: double.infinity,
-              child: CustomButton(
-                  title: "Buy Now",
-                  onPressed: () {},
-                  color: kPrimaryColor,
-                  textStyle: titleTextStyle.copyWith(color: Colors.white)),
+                child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: const EdgeInsets.only(top: 8),
+                height: 70,
+                width: double.infinity,
+                child: CustomButton(
+                    title: "Buy Now",
+                    onPressed: () {},
+                    color: kPrimaryColor,
+                    textStyle: titleTextStyle.copyWith(color: Colors.white)),
+              ),
             ))
           ],
         ),

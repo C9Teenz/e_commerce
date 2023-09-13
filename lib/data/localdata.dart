@@ -33,4 +33,20 @@ class LocalData {
       return pref.getString('token')?.isNotEmpty ?? false;
     });
   }
+
+  static Future<void>deleteToken()async{
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.remove('token');
+  }
+
+  static Future<String>saveCart(String data)async{
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('cart', data);
+    return data;
+  }
+
+  static Future<String>getCart()async{
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getString('cart')??'[]';
+  }
 }
