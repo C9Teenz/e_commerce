@@ -49,4 +49,18 @@ class LocalData {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.getString('cart')??'[]';
   }
+ static Future<String> saveId(String id) {
+    return SharedPreferences.getInstance().then((pref) {
+      pref.setString('id', id);
+      return id;
+    });
+  }
+
+    static Future<String> getId() {
+    return SharedPreferences.getInstance().then((pref) {
+   
+      return pref.getString('id') ?? '';
+    });
+  }
+
 }

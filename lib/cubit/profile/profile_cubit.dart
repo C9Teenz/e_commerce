@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:e_commerce_comic/data/localdata.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -18,8 +19,9 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(const _Loading());
     final res = await data.getUser();
     res.fold((l) => emit(_Error(l)), (r) {
-      print(r);
-      emit(_Loaded(r));
+      LocalData.saveId("${r.id}").then(
+        (value) => emit(_Loaded(r)),
+      );
     });
   }
 }

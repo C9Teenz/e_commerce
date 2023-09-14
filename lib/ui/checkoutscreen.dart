@@ -2,18 +2,25 @@
 // ignore_for_file: camel_case_types, prefer_typing_uninitialized_variables
 
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:e_commerce_comic/cubit/order/order_cubit.dart';
+import 'package:e_commerce_comic/cubit/url_payment/url_payment_cubit.dart';
+import 'package:e_commerce_comic/data/localdata.dart';
+import 'package:e_commerce_comic/models/request_order_model.dart';
 import 'package:e_commerce_comic/routers/app_pages.dart';
 import 'package:e_commerce_comic/ui/widgets/custombutton.dart';
 import 'package:e_commerce_comic/ui/widgets/customcheckout.dart';
+import 'package:e_commerce_comic/ui/widgets/snapwidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import 'package:e_commerce_comic/models/cartmodel.dart';
 
+import '../cubit/cart/cart_cubit.dart';
 import '../utils/themes.dart';
 
-class CheckoutScreen extends StatelessWidget {
+class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({
     Key? key,
     required this.datas,
@@ -23,9 +30,15 @@ class CheckoutScreen extends StatelessWidget {
   final int itemsPrice;
 
   @override
+  State<CheckoutScreen> createState() => _CheckoutScreenState();
+}
+
+class _CheckoutScreenState extends State<CheckoutScreen> {
+  TextEditingController address = TextEditingController();
+  final List<String> items = ["JNE", "JNT", "Ninja", "Tiki"];
+  String? selectedValue;
+  @override
   Widget build(BuildContext context) {
-    final List<String> items = ["JNE", "JNT", "Ninja", "Tiki"];
-    String? selectedValue;
     Widget header() {
       return SizedBox(
         width: double.infinity,
@@ -72,7 +85,11 @@ class CheckoutScreen extends StatelessWidget {
                   ))
               .toList(),
           value: selectedValue,
-          onChanged: (String? value) {},
+          onChanged: (String? value) {
+            setState(() {
+              selectedValue = value;
+            });
+          },
           dropdownStyleData: DropdownStyleData(
             maxHeight: 200,
             width: MediaQuery.of(context).size.width - 40,
@@ -117,7 +134,7 @@ class CheckoutScreen extends StatelessWidget {
             Text(
               'Payment',
               style: primaryTextStyle.copyWith(
-                  fontSize: 16, fontWeight: semiBold, color: Colors.black),
+                  fontSize: 14, fontWeight: semiBold, color: Colors.black),
             ),
             const SizedBox(
               height: 8,
@@ -139,7 +156,7 @@ class CheckoutScreen extends StatelessWidget {
                                   locale: 'id',
                                   symbol: 'IDR ',
                                   decimalDigits: 0)
-                              .format(itemsPrice),
+                              .format(widget.itemsPrice),
                         )
                       ],
                     ),
@@ -172,13 +189,21 @@ class CheckoutScreen extends StatelessWidget {
                           'Delivery Fee',
                           style: secondaryTextStyle.copyWith(fontSize: 14),
                         ),
-                        Text(
-                          NumberFormat.currency(
-                                  locale: 'id',
-                                  symbol: 'IDR ',
-                                  decimalDigits: 0)
-                              .format(20000),
-                        )
+                        selectedValue == null
+                            ? Text(
+                                NumberFormat.currency(
+                                        locale: 'id',
+                                        symbol: 'IDR ',
+                                        decimalDigits: 0)
+                                    .format(0),
+                              )
+                            : Text(
+                                NumberFormat.currency(
+                                        locale: 'id',
+                                        symbol: 'IDR ',
+                                        decimalDigits: 0)
+                                    .format(20000),
+                              )
                       ],
                     ),
                     const SizedBox(
@@ -208,6 +233,7 @@ class CheckoutScreen extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(top: 8),
                   child: TextFormField(
+                    controller: address,
                     maxLines: 3,
                     decoration: InputDecoration(
                         hintText: "Address",
@@ -228,9 +254,9 @@ class CheckoutScreen extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.25,
                   width: double.infinity,
                   child: ListView.builder(
-                    itemCount: datas.length,
+                    itemCount: widget.datas.length,
                     itemBuilder: (context, index) {
-                      return CustomCheckout(data: datas[index]);
+                      return CustomCheckout(data: widget.datas[index]);
                     },
                   ),
                 ),
@@ -275,21 +301,51 @@ class CheckoutScreen extends StatelessWidget {
                   Text(
                     NumberFormat.currency(
                             locale: 'id', symbol: 'IDR ', decimalDigits: 0)
-                        .format(itemsPrice + 20000),
+                        .format(widget.itemsPrice + 20000),
                     style: primaryTextStyle.copyWith(
                         fontSize: 17, fontWeight: semiBold),
                   )
                 ],
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-              width: MediaQuery.of(context).size.width * 0.4,
-              child: CustomButton(
-                  title: "Pay Now",
-                  onPressed: () {},
-                  color: kPrimaryColor,
-                  textStyle: titleTextStyle.copyWith(color: Colors.white)),
+            BlocListener<OrderCubit, OrderState>(
+              listener: (context, state) {
+                state.maybeWhen(
+                  orElse: () {},
+                  loaded: (url) {
+                    context.read<UrlPaymentCubit>().addUrl(url);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return SnapWidget(url: url);
+                    }));
+                  },
+                );
+              },
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+                width: MediaQuery.of(context).size.width * 0.4,
+                child: CustomButton(
+                    title: "Pay Now",
+                    onPressed: () async {
+                      String id = await LocalData.getId();
+                      Data file = Data(
+                          items: widget.datas,
+                          totalPrice: widget.itemsPrice,
+                          destinationAddress: address.text,
+                          courier: selectedValue!,
+                          shippingCost: 20000,
+                          user: id != "" ? int.parse(id) : 1,
+                          statusOrder: "waitingPayment");
+                      RequestOrderModel data = RequestOrderModel(data: file);
+                      if (context.mounted) {
+                        print(requestOrderModelToJson(data));
+                        context.read<OrderCubit>().addOrder(data);
+                        context.read<CartCubit>().deleteItems(widget.datas);
+                      }
+                    },
+                    color: kPrimaryColor,
+                    textStyle: titleTextStyle.copyWith(color: Colors.white)),
+              ),
             )
           ],
         ),

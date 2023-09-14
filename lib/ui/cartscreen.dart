@@ -8,6 +8,7 @@ import 'package:e_commerce_comic/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../models/cartmodel.dart';
 import '../routers/app_pages.dart';
@@ -167,17 +168,25 @@ class _CartScreenState extends State<CartScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.4,
+              width: MediaQuery.of(context).size.width * 0.5,
+              height: MediaQuery.of(context).size.height * 0.05,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Total Price",
-                    style: blueTextStyle.copyWith(fontWeight: semiBold),
+                    'Total Price',
+                    style: secondaryTextStyle.copyWith(fontSize: 16),
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 0.1,
                   ),
-                  Text("$totalharga")
+                  Text(
+                    NumberFormat.currency(
+                            locale: 'id', symbol: 'IDR ', decimalDigits: 0)
+                        .format(totalharga),
+                    style: primaryTextStyle.copyWith(
+                        fontSize: 17, fontWeight: semiBold),
+                  )
                 ],
               ),
             ),
@@ -188,6 +197,7 @@ class _CartScreenState extends State<CartScreen> {
                 child: CustomButton(
                     title: "Buy",
                     onPressed: () {
+                     
                       context.goNamed(Routes.checkout,
                           pathParameters: {"prices": "$totalharga"},
                           extra: dataTemporary);

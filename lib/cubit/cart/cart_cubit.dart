@@ -80,4 +80,15 @@ class CartCubit extends Cubit<CartState> {
       }
     }
   }
+
+  void deleteItems(List<CartModel> input) async {
+    var datas = await LocalData.getCart();
+    // ignore: prefer_typing_uninitialized_variables
+    var sisaData = _Loaded(cartModelFromJson(datas));
+    sisaData.model.removeWhere((element) {
+      return input.any((item) => element.id == item.id);
+    });
+    await LocalData.saveCart(cartModelToJson(sisaData.model));
+    emit(sisaData);
+  }
 }

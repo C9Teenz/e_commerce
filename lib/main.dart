@@ -6,6 +6,7 @@ import 'package:e_commerce_comic/cubit/getcomic/getcomic_cubit.dart';
 import 'package:e_commerce_comic/cubit/home/home_cubit.dart';
 import 'package:e_commerce_comic/cubit/navbarbutton/navbarbutton_cubit.dart';
 import 'package:e_commerce_comic/cubit/profile/profile_cubit.dart';
+import 'package:e_commerce_comic/cubit/url_payment/url_payment_cubit.dart';
 import 'package:e_commerce_comic/data/authdata.dart';
 import 'package:e_commerce_comic/data/remotedatacomic.dart';
 import 'package:e_commerce_comic/routers/app_pages.dart';
@@ -15,6 +16,7 @@ import 'package:go_router/go_router.dart';
 
 import 'cubit/login/login_cubit.dart';
 import 'cubit/onboarding/onboarding_cubit.dart';
+import 'cubit/order/order_cubit.dart';
 import 'utils/constants.dart';
 
 void main() {
@@ -51,6 +53,12 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider<CartCubit>(
           create: (context) => CartCubit(),
+        ),
+        BlocProvider<UrlPaymentCubit>(
+          create: (context) => UrlPaymentCubit(),
+        ),
+        BlocProvider<OrderCubit>(
+          create: (context) => OrderCubit(),
         ),
         BlocProvider<LoginCubit>(
           create: (context) => LoginCubit(AuthData()),
