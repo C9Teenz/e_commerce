@@ -6,7 +6,9 @@ import 'package:e_commerce_comic/cubit/getcomic/getcomic_cubit.dart';
 import 'package:e_commerce_comic/cubit/home/home_cubit.dart';
 import 'package:e_commerce_comic/cubit/navbarbutton/navbarbutton_cubit.dart';
 import 'package:e_commerce_comic/cubit/profile/profile_cubit.dart';
+import 'package:e_commerce_comic/cubit/purchased_order/purchased_order_cubit.dart';
 import 'package:e_commerce_comic/cubit/url_payment/url_payment_cubit.dart';
+import 'package:e_commerce_comic/cubit/waiting_payment/waiting_payment_cubit.dart';
 import 'package:e_commerce_comic/data/authdata.dart';
 import 'package:e_commerce_comic/data/remotedatacomic.dart';
 import 'package:e_commerce_comic/routers/app_pages.dart';
@@ -60,6 +62,12 @@ class MainApp extends StatelessWidget {
         BlocProvider<OrderCubit>(
           create: (context) => OrderCubit(),
         ),
+        BlocProvider<PurchasedOrderCubit>(
+          create: (context) => PurchasedOrderCubit(),
+        ),
+        BlocProvider<WaitingPaymentCubit>(
+          create: (context) => WaitingPaymentCubit(),
+        ),
         BlocProvider<LoginCubit>(
           create: (context) => LoginCubit(AuthData()),
         ),
@@ -75,7 +83,7 @@ class MainApp extends StatelessWidget {
         title: Constant.titleApp,
         debugShowCheckedModeBanner: false,
         routerConfig:
-            GoRouter(routes: AppPages.routes, initialLocation: Routes.main),
+            GoRouter(routes: AppPages.routes, initialLocation: Routes.splash),
       ),
     );
   }

@@ -26,7 +26,7 @@ class OnBoardingTwo extends StatelessWidget {
               height: size,
               decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  image: DecorationImage(image: AssetImage(Constant.books))),
+                  image: DecorationImage(image: AssetImage(Constant.savemoney))),
             ),
             const SizedBox(
               height: 32,

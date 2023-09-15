@@ -197,8 +197,7 @@ class _CartScreenState extends State<CartScreen> {
                 child: CustomButton(
                     title: "Buy",
                     onPressed: () {
-                     
-                      context.goNamed(Routes.checkout,
+                      context.pushNamed(Routes.checkout,
                           pathParameters: {"prices": "$totalharga"},
                           extra: dataTemporary);
                       setState(() {

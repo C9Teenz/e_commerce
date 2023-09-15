@@ -10,6 +10,8 @@ class Routes{
   static const String onboarding='/onboarding';
   static const String main='/main';
   static const String checkout='/checkout';
+  static const String transaction='/transaction';
+  static const String detailTransaction='/detailtransaction';
   
 
 }

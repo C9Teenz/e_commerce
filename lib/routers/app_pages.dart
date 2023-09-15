@@ -5,9 +5,12 @@ import 'package:e_commerce_comic/ui/mainscreen.dart';
 import 'package:e_commerce_comic/ui/onboarding.dart';
 import 'package:e_commerce_comic/ui/registerscreen.dart';
 import 'package:e_commerce_comic/ui/splashscreen.dart';
+import 'package:e_commerce_comic/ui/transaction_history_screen.dart';
 import 'package:go_router/go_router.dart';
 
+import '../models/response_order_model.dart';
 import '../ui/checkoutscreen.dart';
+import '../ui/detail_payment_screen.dart';
 import '../ui/detailscreen.dart';
 part 'app_routes.dart';
 
@@ -35,6 +38,10 @@ class AppPages {
       builder: (context, state) => const MainScreen(),
     ),
     GoRoute(
+      path: Routes.transaction,
+      builder: (context, state) => const TransactionsHistoryScreen(),
+    ),
+    GoRoute(
       path: "${Routes.checkout}/:prices",
       name: Routes.checkout,
       builder: (context, state) {
@@ -42,6 +49,17 @@ class AppPages {
         return CheckoutScreen(
           datas: data,
           itemsPrice: int.parse(state.pathParameters["prices"]!),
+        );
+      },
+    ),
+    GoRoute(
+      path: "${Routes.detailTransaction}/:indexs",
+      name: Routes.detailTransaction,
+      builder: (context, state) {
+        ResponseOrder data = state.extra as ResponseOrder;
+        return DetailPaymentScreen(
+          datas: data,
+          index: int.parse(state.pathParameters["indexs"]!),
         );
       },
     ),

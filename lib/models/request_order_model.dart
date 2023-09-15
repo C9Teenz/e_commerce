@@ -3,7 +3,6 @@
 //     final requestOrderModel = requestOrderModelFromJson(jsonString);
 
 import 'package:e_commerce_comic/models/cartmodel.dart';
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 RequestOrderModel requestOrderModelFromJson(String str) => RequestOrderModel.fromJson(json.decode(str));

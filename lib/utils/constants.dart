@@ -7,6 +7,8 @@ class Constant {
   static const logo = 'assets/logo.png';
   static const backgroundImage = 'assets/images/background.png';
   static const books = 'assets/images/books.jpg';
+  static const trusted= 'assets/images/trusted.jpg';
+  static const savemoney = 'assets/images/money.jpg';
 
   static const List imagesCarosel = [
     "https://www.komar.de/media/catalog/category/komar_fototapeten_header_Comic.jpg",

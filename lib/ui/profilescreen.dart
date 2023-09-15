@@ -1,6 +1,8 @@
 // ignore_for_file: camel_case_types, prefer_typing_uninitialized_variables
 
 import 'package:e_commerce_comic/cubit/profile/profile_cubit.dart';
+import 'package:e_commerce_comic/cubit/purchased_order/purchased_order_cubit.dart';
+import 'package:e_commerce_comic/cubit/waiting_payment/waiting_payment_cubit.dart';
 import 'package:e_commerce_comic/data/localdata.dart';
 import 'package:e_commerce_comic/routers/app_pages.dart';
 import 'package:e_commerce_comic/ui/widgets/custombutton.dart';
@@ -84,26 +86,33 @@ class ProfileScreen extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: const Row(
-                          children: [
-                            Icon(Icons.history),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Text(
-                              "Transaction Histories",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                      GestureDetector(
+                        onTap: () {
+                          context.read<PurchasedOrderCubit>().get();
+                          context.read<WaitingPaymentCubit>().get();
+                          context.push(Routes.transaction);
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: const Row(
+                            children: [
+                              Icon(Icons.history),
+                              SizedBox(
+                                width: 16,
                               ),
-                            ),
-                            Spacer(),
-                            Icon(Icons.arrow_forward_ios),
-                          ],
+                              Text(
+                                "Transaction Histories",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Spacer(),
+                              Icon(Icons.arrow_forward_ios),
+                            ],
+                          ),
                         ),
                       ),
                       Expanded(

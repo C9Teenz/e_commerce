@@ -26,7 +26,7 @@ class OnBoardingThree extends StatelessWidget {
               height: size,
               decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  image: DecorationImage(image: AssetImage(Constant.books))),
+                  image: DecorationImage(image: AssetImage(Constant.trusted))),
             ),
             const SizedBox(
               height: 32,

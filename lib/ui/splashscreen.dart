@@ -50,7 +50,7 @@ class SplashScreen extends StatelessWidget {
             height: 8,
           ),
           Text(
-            'belum ada ide',
+            'brings comics to life with ease',
             style: titleTextStyle.copyWith(
                 fontWeight: light, color: kSecondaryTwoColor, fontSize: 16),
           ),

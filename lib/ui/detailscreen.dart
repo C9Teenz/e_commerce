@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import 'package:e_commerce_comic/cubit/cart/cart_cubit.dart';
@@ -14,20 +15,20 @@ import 'package:e_commerce_comic/ui/widgets/carosel_detail.dart';
 import 'package:e_commerce_comic/ui/widgets/custombutton.dart';
 import 'package:e_commerce_comic/utils/constants.dart';
 
+import '../routers/app_pages.dart';
 import '../utils/themes.dart';
 
 class DetailScreen extends StatelessWidget {
   const DetailScreen({
     Key? key,
     required this.data,
-
   }) : super(key: key);
   final ComicModelDatum data;
-
 
   @override
   Widget build(BuildContext context) {
     int qty = 0;
+
     return Scaffold(
       backgroundColor: kContainerColor,
       body: SafeArea(
@@ -49,7 +50,8 @@ class DetailScreen extends StatelessWidget {
                         ),
                         child: IconButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            context.read<CounterCubit>().reset();
+                            context.pop();
                           },
                           icon: const Icon(Icons.arrow_back),
                         ),
@@ -323,7 +325,47 @@ class DetailScreen extends StatelessWidget {
                 width: double.infinity,
                 child: CustomButton(
                     title: "Buy Now",
-                    onPressed: () {},
+                    onPressed: () {
+                      List<CartModel> datas = [
+                        CartModel(
+                            id: data.id,
+                            comicName: data.attributes.comicName,
+                            image:
+                                "${Constant.baseUrl}${data.attributes.images.data[0].attributes.url}",
+                            price: int.parse(data.attributes.price),
+                            qty: qty)
+                      ];
+
+                      LocalData.isLogin().then(
+                        (value) {
+                          if (value) {
+                            context.pushNamed(Routes.checkout,
+                                pathParameters: {
+                                  "prices":
+                                      "${qty * int.parse(data.attributes.price)}"
+                                },
+                                extra: datas);
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text("Warning"),
+                                  content: const Text("Please login first"),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("Ok"))
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        },
+                      );
+                    },
                     color: kPrimaryColor,
                     textStyle: titleTextStyle.copyWith(color: Colors.white)),
               ),
