@@ -89,7 +89,6 @@ class _CartScreenState extends State<CartScreen> {
                     );
                   },
                   loaded: (model) {
-                    print(model);
                     if (model.isEmpty) {
                       return const Center(
                         child: Text("No Data"),
@@ -99,6 +98,7 @@ class _CartScreenState extends State<CartScreen> {
                       itemCount: model.length,
                       itemBuilder: (context, index) {
                         return CustomCartItem(
+                          input: model[index],
                           id: model[index].id,
                           title: model[index].comicName,
                           image: model[index].image,
@@ -109,11 +109,19 @@ class _CartScreenState extends State<CartScreen> {
                             addData(model[index]);
                           },
                           increment: () {
+                            setState(() {
+                              totalharga = 0;
+                              dataTemporary = [];
+                            });
                             context
                                 .read<CartCubit>()
                                 .incrementItem(model[index].id);
                           },
                           decrement: () {
+                            setState(() {
+                              totalharga = 0;
+                              dataTemporary = [];
+                            });
                             if (model[index].qty > 0) {
                               context
                                   .read<CartCubit>()

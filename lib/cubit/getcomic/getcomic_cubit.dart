@@ -22,12 +22,12 @@ class GetcomicCubit extends Cubit<GetcomicState> {
     });
   }
 
-  void getNext(int page) async {
+  void getNext({required int page,required List<ComicModelDatum> datas}) async {
     page = page + 1;
     final result = await data.getData(page: page);
     result.fold((l) => emit(_Error(l)), (r) {
       bool isnext = r.data.length == 10;
-      emit(_Loaded(r.data, page, isnext));
+      emit(_Loaded([...datas,...r.data], page, isnext));
     });
   }
 

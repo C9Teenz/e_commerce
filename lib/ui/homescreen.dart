@@ -10,7 +10,9 @@ import 'package:e_commerce_comic/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../models/comic_model.dart';
 import '../utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,6 +23,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int pageN = 0;
+  bool isNext = true;
+  List<ComicModelDatum> comics = [];
+  final controller = ScrollController();
+  @override
+  void initState() {
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        context.read<GetcomicCubit>().getNext(datas: comics, page: pageN);
+      }
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     List<GenreCategoryModel> data = Constant.filter
@@ -129,12 +146,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: CircularProgressIndicator(),
                               ),
                               loaded: (model, page, isNext) {
+                                pageN = page;
+                                comics = model;
                                 if (model.isEmpty) {
                                   return const Center(
                                     child: Text("No Comics"),
                                   );
                                 }
                                 return GridView.builder(
+                                  controller: controller,
                                   padding: EdgeInsets.zero,
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
@@ -143,15 +163,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                     mainAxisSpacing: 8,
                                     crossAxisSpacing: 8,
                                   ),
-                                  itemCount: model.length,
+                                  itemCount:
+                                      isNext ? model.length + 2 : model.length,
                                   shrinkWrap: true,
                                   physics: const ScrollPhysics(),
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     final item = model[index];
-                                    return GestureDetector(onTap: (){
-                                      context.push(Routes.detail,extra: item);
-                                    },child: CardItem(data: item));
+                                    if (isNext && index == model.length ||
+                                        index == model.length + 1) {
+                                      return Shimmer.fromColors(
+                                          baseColor: Colors.grey[800]!,
+                                          highlightColor: Colors.grey[600]!,
+                                          child: Container(
+                                            width: double.infinity,
+                                            height: 180,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(9),
+                                            ),
+                                          ));
+                                    } else {
+                                      return GestureDetector(
+                                          onTap: () {
+                                            context.push(Routes.detail,
+                                                extra: item);
+                                          },
+                                          child: CardItem(data: item));
+                                    }
                                   },
                                 );
                               },

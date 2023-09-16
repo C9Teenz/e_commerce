@@ -1,7 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: camel_case_types, prefer_typing_uninitialized_variables
 
+import 'package:e_commerce_comic/cubit/cart/cart_cubit.dart';
+import 'package:e_commerce_comic/models/cartmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../utils/themes.dart';
@@ -18,7 +22,9 @@ class CustomCartItem extends StatefulWidget {
       this.change = false,
       required this.ontap,
       required this.increment,
-      required this.decrement})
+      required this.decrement,
+      required this.input
+      })
       : super(key: key);
   final int id;
   final String title;
@@ -28,6 +34,7 @@ class CustomCartItem extends StatefulWidget {
   final Function() ontap;
   final Function() increment;
   final Function() decrement;
+  final CartModel input;
 
   bool change;
 
@@ -77,7 +84,9 @@ class _CustomCartItemState extends State<CustomCartItem> {
                     ),
                     onPressed: () {
                       confirm = true;
-                      Navigator.pop(context);
+                      context.read<CartCubit>().deleteItem(widget.input);
+                      context.pop();
+
                     },
                     child: const Text("Yes"),
                   ),

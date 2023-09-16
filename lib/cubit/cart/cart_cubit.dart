@@ -91,4 +91,13 @@ class CartCubit extends Cubit<CartState> {
     await LocalData.saveCart(cartModelToJson(sisaData.model));
     emit(sisaData);
   }
+
+  void deleteItem(CartModel input)async{
+    var datas = await LocalData.getCart();
+    // ignore: prefer_typing_uninitialized_variables
+    var sisaData = _Loaded(cartModelFromJson(datas));
+    sisaData.model.removeWhere((element) => element.id == input.id);
+    await LocalData.saveCart(cartModelToJson(sisaData.model));
+    emit(sisaData);
+  }
 }

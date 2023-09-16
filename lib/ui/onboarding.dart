@@ -32,14 +32,17 @@ class _OnBoardingState extends State<OnBoarding> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CustomButton(
-                  title: 'login',
-                  onPressed: () async {
-                    await LocalData.savestate("login page")
-                        .then((value) => context.go(Routes.login));
-                  },
-                  color: kPrimaryColor,
-                  textStyle: whiteTextStyle),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: CustomButton(
+                    title: 'login',
+                    onPressed: () async {
+                      await LocalData.savestate("login page")
+                          .then((value) => context.go(Routes.login));
+                    },
+                    color: kPrimaryColor,
+                    textStyle: whiteTextStyle),
+              ),
               const SizedBox(
                 height: 20,
               ),

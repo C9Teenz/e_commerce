@@ -98,7 +98,10 @@ class DetailScreen extends StatelessWidget {
                                                 context
                                                     .read<CartCubit>()
                                                     .addData(CartModel.fromJson(
-                                                        file))
+                                                        file)),
+                                                context
+                                                    .read<CounterCubit>()
+                                                    .reset()
                                               }
                                           }
                                         else

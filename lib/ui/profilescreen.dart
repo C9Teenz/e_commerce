@@ -58,8 +58,9 @@ class ProfileScreen extends StatelessWidget {
                       const Center(
                         child: CircleAvatar(
                           radius: 80.0,
-                          backgroundImage: NetworkImage(
-                            "https://i.ibb.co/PGv8ZzG/me.jpg",
+                          child: Icon(
+                            Icons.person,
+                            size: 70,
                           ),
                         ),
                       ),
@@ -163,9 +164,7 @@ class ProfileScreen extends StatelessWidget {
                                   },
                                 );
 
-                                if (confirm) {
-                                  print("Confirmed!");
-                                }
+                                if (confirm) {}
                               },
                               color: Colors.red,
                               textStyle: whiteTextStyle),
@@ -183,7 +182,7 @@ class ProfileScreen extends StatelessWidget {
                       width: 150,
                       child: Column(
                         children: [
-                          Text(error),
+                          const Text("Please login first"),
                           const SizedBox(
                             height: 8,
                           ),
