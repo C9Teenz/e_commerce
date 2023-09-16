@@ -331,7 +331,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       String id = await LocalData.getId();
                       Data file = Data(
                           items: widget.datas,
-                          totalPrice: widget.itemsPrice,
+                          totalPrice: widget.itemsPrice + shipping,
                           destinationAddress: address.text,
                           courier: selectedValue!,
                           shippingCost: 20000,
