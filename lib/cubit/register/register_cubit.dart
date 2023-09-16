@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:e_commerce_comic/data/localdata.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -22,7 +21,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     final res = await data.register(
         username: username, email: email, password: password);
     res.fold((l) => emit(_Error(l)), (r) {
-      LocalData.saveToken(r).then((value) => emit(_Loaded(r)));
+      emit(_Loaded(r));
     });
   }
 }

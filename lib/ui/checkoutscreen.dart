@@ -33,6 +33,7 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
+  int shipping = 0;
   TextEditingController address = TextEditingController();
   final List<String> items = ["JNE", "JNT", "Ninja", "Tiki"];
   String? selectedValue;
@@ -87,6 +88,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           onChanged: (String? value) {
             setState(() {
               selectedValue = value;
+              shipping = 20000;
             });
           },
           dropdownStyleData: DropdownStyleData(
@@ -201,7 +203,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         locale: 'id',
                                         symbol: 'IDR ',
                                         decimalDigits: 0)
-                                    .format(20000),
+                                    .format(shipping),
                               )
                       ],
                     ),
@@ -300,7 +302,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   Text(
                     NumberFormat.currency(
                             locale: 'id', symbol: 'IDR ', decimalDigits: 0)
-                        .format(widget.itemsPrice + 20000),
+                        .format(widget.itemsPrice + shipping),
                     style: primaryTextStyle.copyWith(
                         fontSize: 17, fontWeight: semiBold),
                   )
@@ -337,7 +339,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           statusOrder: "waitingPayment");
                       RequestOrderModel data = RequestOrderModel(data: file);
                       if (context.mounted) {
-                        print(requestOrderModelToJson(data));
                         context.read<OrderCubit>().addOrder(data);
                         context.read<CartCubit>().deleteItems(widget.datas);
                       }

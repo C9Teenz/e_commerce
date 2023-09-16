@@ -7,6 +7,7 @@ import 'package:e_commerce_comic/cubit/home/home_cubit.dart';
 import 'package:e_commerce_comic/cubit/navbarbutton/navbarbutton_cubit.dart';
 import 'package:e_commerce_comic/cubit/profile/profile_cubit.dart';
 import 'package:e_commerce_comic/cubit/purchased_order/purchased_order_cubit.dart';
+import 'package:e_commerce_comic/cubit/register/register_cubit.dart';
 import 'package:e_commerce_comic/cubit/url_payment/url_payment_cubit.dart';
 import 'package:e_commerce_comic/cubit/waiting_payment/waiting_payment_cubit.dart';
 import 'package:e_commerce_comic/data/authdata.dart';
@@ -49,6 +50,9 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider<DetailCubit>(
           create: (context) => DetailCubit(),
+        ),
+        BlocProvider<RegisterCubit>(
+          create: (context) => RegisterCubit(AuthData()),
         ),
         BlocProvider<CounterCubit>(
           create: (context) => CounterCubit(),

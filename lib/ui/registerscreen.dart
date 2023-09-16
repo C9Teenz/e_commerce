@@ -136,8 +136,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 state.maybeWhen(
                   orElse: () {},
                   loaded: (data) {
-                    context.read<NavbarbuttonCubit>().changeIndex(0);
-                    context.go(Routes.main);
+                   
+                    context.go(Routes.login);
                   },
                   error: (error) {
                     showDialog(
@@ -171,7 +171,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     title: "Register",
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        context.go(Routes.login);
+                        context.read<RegisterCubit>().register(
+                            username: username!.text,
+                            email: email!.text,
+                            password: password!.text);
+                        
                       }
                     },
                     color: kPrimaryColor,

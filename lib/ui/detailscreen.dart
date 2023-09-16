@@ -342,12 +342,14 @@ class DetailScreen extends StatelessWidget {
                       LocalData.isLogin().then(
                         (value) {
                           if (value) {
-                            context.pushNamed(Routes.checkout,
-                                pathParameters: {
-                                  "prices":
-                                      "${qty * int.parse(data.attributes.price)}"
-                                },
-                                extra: datas);
+                            if (qty != 0) {
+                              context.pushNamed(Routes.checkout,
+                                  pathParameters: {
+                                    "prices":
+                                        "${qty * int.parse(data.attributes.price)}"
+                                  },
+                                  extra: datas);
+                            }
                           } else {
                             showDialog(
                               context: context,
