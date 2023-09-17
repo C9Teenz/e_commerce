@@ -131,8 +131,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text(error),
-                          content: Text(error),
+                          title: const Text("Error"),
+                          content: const Text("Password atau username salah"),
                           actions: [
                             TextButton(
                               onPressed: () {

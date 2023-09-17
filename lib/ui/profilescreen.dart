@@ -17,7 +17,17 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocBuilder<ProfileCubit, ProfileState>(
+        child: BlocConsumer<ProfileCubit, ProfileState>(
+          listener: (context, state) {
+            state.when(
+              initial: () {},
+              loading: () {},
+              loaded: (user) {},
+              error: (error) async {
+                await LocalData.deleteToken();
+              },
+            );
+          },
           builder: (context, state) {
             return state.when(
               initial: () => Column(

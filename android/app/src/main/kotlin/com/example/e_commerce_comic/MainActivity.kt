@@ -1,4 +1,4 @@
-package com.example.e_commerce_comic
+package com.sirojudinmunir.komiku
 
 import io.flutter.embedding.android.FlutterActivity
 

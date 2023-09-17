@@ -122,7 +122,7 @@ class _CartScreenState extends State<CartScreen> {
                               totalharga = 0;
                               dataTemporary = [];
                             });
-                            if (model[index].qty > 0) {
+                            if (model[index].qty > 1) {
                               context
                                   .read<CartCubit>()
                                   .decrementItem(model[index].id);
