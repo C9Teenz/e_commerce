@@ -99,9 +99,6 @@ class DetailScreen extends StatelessWidget {
                                                     .read<CartCubit>()
                                                     .addData(CartModel.fromJson(
                                                         file)),
-                                                context
-                                                    .read<CounterCubit>()
-                                                    .reset()
                                               }
                                           }
                                         else
@@ -349,6 +346,7 @@ class DetailScreen extends StatelessWidget {
                                         "${qty * int.parse(data.attributes.price)}"
                                   },
                                   extra: datas);
+                              context.read<CounterCubit>().reset();
                             }
                           } else {
                             showDialog(

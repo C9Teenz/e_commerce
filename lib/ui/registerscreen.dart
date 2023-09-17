@@ -1,14 +1,13 @@
-import 'package:e_commerce_comic/cubit/register/register_cubit.dart';
-import 'package:e_commerce_comic/ui/widgets/custombutton.dart';
-import 'package:e_commerce_comic/ui/widgets/textformglobal.dart';
-import 'package:e_commerce_comic/ui/widgets/textformpassword.dart';
-import 'package:e_commerce_comic/utils/themes.dart';
+import '../cubit/register/register_cubit.dart';
+import 'widgets/custombutton.dart';
+import 'widgets/textformglobal.dart';
+import 'widgets/textformpassword.dart';
+import '../utils/themes.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../cubit/navbarbutton/navbarbutton_cubit.dart';
 import '../routers/app_pages.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -136,7 +135,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 state.maybeWhen(
                   orElse: () {},
                   loaded: (data) {
-                   
                     context.go(Routes.login);
                   },
                   error: (error) {
@@ -175,7 +173,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             username: username!.text,
                             email: email!.text,
                             password: password!.text);
-                        
                       }
                     },
                     color: kPrimaryColor,

@@ -60,7 +60,13 @@ class TransactionsHistoryScreen extends StatelessWidget {
                               loading: () => const Center(
                                     child: CircularProgressIndicator(),
                                   ),
-                              loaded: (data) => ListView.builder(
+                              loaded: (data) {
+                                if (data.isEmpty) {
+                                  return const Center(
+                                    child: Text("No Data"),
+                                  );
+                                } else {
+                                  return ListView.builder(
                                     itemCount: data.length,
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
@@ -77,7 +83,9 @@ class TransactionsHistoryScreen extends StatelessWidget {
                                         ),
                                       );
                                     },
-                                  ),
+                                  );
+                                }
+                              },
                               error: (e) => Center(
                                     child: Text(e),
                                   ));
@@ -113,21 +121,32 @@ class TransactionsHistoryScreen extends StatelessWidget {
                             loading: () => const Center(
                               child: CircularProgressIndicator(),
                             ),
-                            loaded: (data) => ListView.builder(
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    context.pushNamed(Routes.detailTransaction,
-                                        pathParameters: {"indexs": "$index"},
-                                        extra: data[index]);
-                                  },
-                                  child: CardTransaction(
-                                    data: data[index],
-                                  ),
+                            loaded: (data) {
+                              if (data.isEmpty) {
+                                return const Center(
+                                  child: Text("No Data"),
                                 );
-                              },
-                            ),
+                              } else {
+                                return ListView.builder(
+                                  itemCount: data.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        context.pushNamed(
+                                            Routes.detailTransaction,
+                                            pathParameters: {
+                                              "indexs": "$index"
+                                            },
+                                            extra: data[index]);
+                                      },
+                                      child: CardTransaction(
+                                        data: data[index],
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+                            },
                             error: (e) => Center(
                               child: Text(e),
                             ),
